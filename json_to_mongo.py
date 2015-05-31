@@ -4,8 +4,8 @@ from pymongo import MongoClient
 import Config
 
 db = MongoClient(Config.MONGO_CONNECTION_URL)[Config.ACADEMIC_DATASET_DB]
-reviews_collection = db[Config.REVIEWS_COLLECTION]
-business_collection = db[Config.BUSINESS_COLLECTION]
+reviews_collection = db[Config.COLLECTION_REVIEWS]
+business_collection = db[Config.COLLECTION_BUSINESSES]
 
 def importBusinesses(dataset):
     yelp_data = open(dataset)
@@ -41,6 +41,13 @@ def importReviews(dataset):
                 })
 
 if __name__ == "__main__":
+    if reviews_collection.count() > 0:
+        print "dropping collection"
+        reviews_collection.drop()
+    if business_collection.count() > 0:
+        print "dropping collection"
+        business_collection.drop()
+
     t0 = time.time()
     print "Loading data..."
     dataset = Config.YELP_DATASET
@@ -49,8 +56,8 @@ if __name__ == "__main__":
     print "Done."
     print time.time() - t0, "seconds"
 
-    review_count = db[Config.REVIEWS_COLLECTION].count()
-    business_count = db[Config.BUSINESS_COLLECTION].count()
+    review_count = db[Config.COLLECTION_REVIEWS].count()
+    business_count = db[Config.COLLECTION_BUSINESSES].count()
     print "# review documents: ", review_count
     print "# business documents: ", business_count
 

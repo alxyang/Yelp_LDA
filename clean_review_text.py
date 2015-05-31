@@ -25,7 +25,6 @@ def clean_data():
         # lower case and remove punctiation
         punctuation = set(string.punctuation)
         review_text = (''.join([c for c in r['text'].lower() if not c in punctuation]))
-        # remove punctuation?
 
         sentences = nltk.sent_tokenize(review_text)
         for sentence in sentences:
