@@ -1,3 +1,8 @@
 .DS_store
 yelp_academic_dataset.json
 *.pyc
+*.mm
+*.lda
+*.dict
+*.mm.*
+*.lda.*

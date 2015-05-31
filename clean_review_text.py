@@ -1,8 +1,8 @@
 from pymongo import MongoClient
 import nltk
 import time
-import Config
 import string
+import Config
 
 db = MongoClient(Config.MONGO_CONNECTION_URL)[Config.ACADEMIC_DATASET_DB]
 reviews_collection = db[Config.REVIEWS_COLLECTION]
@@ -23,7 +23,8 @@ def clean_data():
         cleaned_review_words = []
 
         # lower case and remove punctiation
-        review_text = r['text'].lower()
+        punctuation = set(string.punctuation)
+        review_text = (''.join([c for c in r['text'].lower() if not c in punctuation]))
         # remove punctuation?
 
         sentences = nltk.sent_tokenize(review_text)
