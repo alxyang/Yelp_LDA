@@ -29,5 +29,5 @@ if __name__ == "__main__":
     print "# of businesses", len(b)
     print "# of users", len(u)
 
-
+    print r[0]
 
