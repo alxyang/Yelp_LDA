@@ -1,3 +1,6 @@
 .DS_store
 yelp_academic_dataset.json
+corpus_v1.mm
+corpus_v1.mm.index
+dict_v1.dict
 

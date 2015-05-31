@@ -22,12 +22,11 @@ def importJSON(dataset):
 if __name__ == "__main__":
     dataset = "yelp_academic_dataset.json"
     print "Loading data..."
-    r, b, u = importJSON(dataset)
+    reviews, businesses, users = importJSON(dataset)
     print "Done."
 
-    print "# of reviews", len(r)
-    print "# of businesses", len(b)
-    print "# of users", len(u)
-
+    print "# of reviews", len(reviews)
+    print "# of businesses", len(businesses)
+    print "# of users", len(users)
 
 
