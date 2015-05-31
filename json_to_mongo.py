@@ -1,8 +1,7 @@
-import os
 import time
 import json
-import Config
 from pymongo import MongoClient
+import Config
 
 db = MongoClient(Config.MONGO_CONNECTION_URL)[Config.ACADEMIC_DATASET_DB]
 reviews_collection = db[Config.REVIEWS_COLLECTION]
@@ -34,11 +33,11 @@ def importReviews(dataset):
             is_restaurant = business_collection.find({"_id": data["business_id"]}).count()
             if is_restaurant > 0:
                 reviews_collection.insert({
-                    "reviewId": data["review_id"],
-                    "business": data["business_id"],
+                    "review_id": data["review_id"],
+                    "business_id": data["business_id"],
                     "text": data["text"],
-                    "stars": data['stars'],
-                    "votes":data["votes"]
+                    "stars": data["stars"],
+                    "votes": data["votes"]
                 })
 
 if __name__ == "__main__":
