@@ -54,3 +54,13 @@ corpora.MmCorpus.serialize('corpus_v1.mm', corpus)
 dictionary = corpora.Dictionary.load('dict_v1.dict')
 corpus = corpora.MmCorpus('corpus_v1.mm')
 
+tfidf = models.TfidfModel(corpus)
+corpus_tfidf = tfidf[corpus]
+
+lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=50)
+topics = lsi.print_topics(50)
+
+for i in range(len(topics)):
+    print "topic #%r: " %(i+1), topics[i]
+    
+lsi.save('model.lsi')
