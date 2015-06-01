@@ -18,7 +18,12 @@ def importBusinesses(dataset):
         #users not considered
         if data["type"] == "business" and 'Restaurants' in data["categories"]:
             business_collection.insert({
-                "_id": data["business_id"]
+                "_id": data["business_id"],
+                "name": data["name"],
+                "city": data["city"],
+                "state": data["state"],
+                "categories": data["categories"],
+                "stars": data["stars"]
                 })
 
 def importReviews(dataset):
