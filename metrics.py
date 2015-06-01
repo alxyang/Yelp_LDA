@@ -25,8 +25,9 @@ if __name__ == "__main__":
     reviews, businesses, users = importJSON(dataset)
     print "Done."
 
-    print "# of reviews", len(reviews)
-    print "# of businesses", len(businesses)
-    print "# of users", len(users)
+
+    print "# of reviews", len(r)
+    print "# of businesses", len(b)
+    print "# of users", len(u)
 
 

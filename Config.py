@@ -1,0 +1,10 @@
+YELP_DATASET = "yelp_academic_dataset.json"
+MONGO_CONNECTION_URL = "mongodb://localhost:27017/"
+ACADEMIC_DATASET_DB = "yelp_academic_dataset"
+COLLECTION_REVIEWS = "Reviews"
+COLLECTION_BUSINESSES = "Business"
+CLEANED_REVIEWS = "CleanedReviews"
+DICTIONARY_LOCAL = "wordsToIds.dict"
+CORPUS_LOCAL = "bagOfWordsVectors.mm"
+LDA_LOCAL = "ldaModel.lda"
+TOPIC_NUM = 50

@@ -1,6 +1,10 @@
 .DS_store
 yelp_academic_dataset.json
+<<<<<<< HEAD
 corpus_v1.mm
 corpus_v1.mm.index
 dict_v1.dict
 
+=======
+*.pyc
+>>>>>>> 416fa35dc9e17f470fd298ceb4112d0cda8689f9
