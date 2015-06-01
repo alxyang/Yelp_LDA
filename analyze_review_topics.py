@@ -44,10 +44,9 @@ def predict_topics(review):
 
     for percentage, topic_number in sorted_topics:
         #print lda.print_topic(topic_number)
-        print str(percentage * 100) + "%" + "\t" + lda.print_topic(topic_number)
+        print str(round(percentage * 100, 2)) + "%" + "\t T:" + str(topic_number) + "\t" + lda.print_topic(topic_number)
 
 if __name__ == "__main__":
-
     print "Vallartas Review"
     vallartas_review = "This is my go-to Mexican place. First off, it has a drive through so my lazy butt doesn't have to change out of pajamas if I'm having a craving for a Cali Burrito. Fast service, good quality and good prices. Their tacos are also really good! I got the carne aside taco combo plate (with rice and beans) and loved it. Also if you order the chips and quac they give you a huge box full of hot crispy tortilla chips smothered in fresh guacamole. Big enough to share between at least 3-4 people, I can never finish it all because the portion is so big."
 
