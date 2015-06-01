@@ -7,4 +7,4 @@ CLEANED_REVIEWS = "CleanedReviews"
 DICTIONARY_LOCAL = "wordsToIds.dict"
 CORPUS_LOCAL = "bagOfWordsVectors.mm"
 LDA_LOCAL = "ldaModel.lda"
-TOPIC_NUM = 5
+TOPIC_NUM = 50

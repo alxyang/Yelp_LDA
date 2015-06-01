@@ -5,7 +5,7 @@ import string
 import Config
 
 db = MongoClient(Config.MONGO_CONNECTION_URL)[Config.ACADEMIC_DATASET_DB]
-reviews_collection = db[Config.REVIEWS_COLLECTION]
+all_reviews = db[Config.COLLECTION_REVIEWS]
 
 # create new table for cleaned reviews, drop if exists
 cleaned_reviews = db[Config.CLEANED_REVIEWS]
@@ -18,7 +18,7 @@ def clean_data():
     wnl = nltk.WordNetLemmatizer()
 
     counter = 0
-    for r in reviews_collection.find():
+    for r in all_reviews.find():
         print counter
         cleaned_review_words = []
 
