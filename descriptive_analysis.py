@@ -21,6 +21,7 @@ for l in locations:
 popularLocations.sort()
 popularLocations.reverse()
 
+
 #analize review corpus
 punctuation = set(string.punctuation)
 
