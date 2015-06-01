@@ -57,7 +57,7 @@ def find_topics_in_review(cleaned_text):
     topics = lda[dictionary.doc2bow(cleaned_text)]
     return topics
 
-# predicts all topics for a given business, separated by rating
+
 def find_positive_topics_for_business(businessId):
     counter = 0
     positive_topics_to_frequency = defaultdict(float)
@@ -77,6 +77,8 @@ def find_positive_topics_for_business(businessId):
     print "# reviews found for this business", counter
     for frequency, topic_id in tmp[:10]:
         print str(frequency) + "\t" + lda.print_topic(topic_id)
+
+    return tmp
 
 def find_negative_topics_for_business(businessId):
     counter = 0
@@ -98,6 +100,8 @@ def find_negative_topics_for_business(businessId):
     for frequency, topic_id in tmp[:10]:
         print str(frequency) + "\t" + lda.print_topic(topic_id)
 
+    return tmp
+
 def display_prediction(review):
     cleaned_text = clean_review(review)
     sorted_topics = find_topics_in_review_sort_by_percentage(cleaned_text)
@@ -111,17 +115,91 @@ def get_business_info(business_id):
         print "state" + "\t" + r['state']
         print "city" + "\t" + r['city']
         print "rating" + "\t" + str(r['stars'])
+        print r['categories']
+        return r
+
+
+# predicts all topics for a given business, separated by rating
+def find_all_topics_for_business(businessId):
+    counter = 0
+    topics_to_frequency = defaultdict(float)
+    for r in cleaned_reviews.find({"business_id": businessId}):
+        # check and handle review rating
+        # clean review topics to only take those above 6%
+        for topic_id, percentage in find_topics_in_review(r['cleaned_text']):
+            if percentage > 0.06:
+                topics_to_frequency[topic_id] += 1
+        counter += 1
+
+    tmp = [(topics_to_frequency[t], t) for t in topics_to_frequency]
+    tmp.sort()
+    tmp.reverse()
+
+    #print "# reviews found for this business", counter
+    #for frequency, topic_id in tmp[:10]:
+        #print str(frequency) + "\t" + lda.print_topic(topic_id)
+
+    topics = [x[1] for x in tmp[:10]]
+    return topics
+
+def max_jaccard(bid, t1):
+    b1 = get_business_info(bid)
+
+    t1 = set(t1)
+    max_jaccard = 0.0
+    max_jaccard_set = set()
+    counter = 0
+
+    for b2 in businesses.find():
+        print counter
+        counter += 1
+        if b1['_id'] == b2['_id']:
+            continue
+
+        if b1['city'] != b2['city']:
+            continue
+
+        #if b2['city'] != 'La Jolla':
+            #continue
+
+        t2 = set(find_all_topics_for_business(b2['_id']))
+        jaccard_similarity = (len(t1.intersection(t2)) * 1.0)/len(t1.union(t2))
+        if jaccard_similarity > max_jaccard:
+            max_jaccard = jaccard_similarity
+            max_jaccard_set.clear()
+        if jaccard_similarity == max_jaccard:
+            max_jaccard_set.add(b2['_id'])
+
+    print max_jaccard_set
+    print max_jaccard
+
+    for bid in max_jaccard_set:
+        get_business_info(bid)
 
 if __name__ == "__main__":
-    print "positive topics"
-    find_positive_topics_for_business('qHmamQPCAKkia9X0uryA8g')
+    #print "positive topics"
+    #find_positive_topics_for_business('qHmamQPCAKkia9X0uryA8g')
 
-    print "negative topics"
-    find_negative_topics_for_business('qHmamQPCAKkia9X0uryA8g')
+    #print "negative topics"
+    #find_negative_topics_for_business('qHmamQPCAKkia9X0uryA8g')
 
-    print "business info"
-    get_business_info('qHmamQPCAKkia9X0uryA8g')
+    #print "business info"
+    #get_business_info('qHmamQPCAKkia9X0uryA8g')
 
-    #for _, bid in businesses_sorted_by_review_count()[:10]:
+    # get the businesses with the most reviews and their info
+    #for _, bid in businesses_sorted_by_review_count()[:100]:
         #get_business_info(bid)
+
+    # top dog
+    #bid1 = 'qHmamQPCAKkia9X0uryA8g'
+
+    # la burrito
+    bid1 = 'q33FT8iYvU2UUbJuiEQWUw'
+
+    # blondies pizza
+    #bid1 = 'WqAtgHTxgS-B8J6iHc4eeA'
+    t1 = find_all_topics_for_business(bid1)
+    max_jaccard(bid1, t1)
+
+
 
