@@ -1,4 +1,4 @@
-from gensim.models import LdaModel
+from gensim  import models
 from collections import defaultdict
 from pymongo import MongoClient
 from gensim import corpora
@@ -11,7 +11,8 @@ cleaned_reviews = db[Config.CLEANED_REVIEWS]
 businesses = db[Config.COLLECTION_BUSINESSES]
 
 dictionary = corpora.Dictionary.load(Config.DICTIONARY_LOCAL)
-lda = LdaModel.load(Config.LDA_LOCAL)
+lda = models.LdaModel.load(Config.LDA_LOCAL)
+lsi = models.LsiModel.load('model.lsi')
 
 def businesses_sorted_by_review_count():
     business_to_reviews = defaultdict(float)
@@ -127,8 +128,8 @@ def find_all_topics_for_business(businessId):
         # check and handle review rating
         # clean review topics to only take those above 6%
         for topic_id, percentage in find_topics_in_review(r['cleaned_text']):
-            if percentage > 0.06:
-                topics_to_frequency[topic_id] += 1
+            #if percentage > 0.06:
+            topics_to_frequency[topic_id] += percentage
         counter += 1
 
     tmp = [(topics_to_frequency[t], t) for t in topics_to_frequency]

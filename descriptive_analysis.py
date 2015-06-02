@@ -6,62 +6,80 @@ Created on Sat May 30 19:40:15 2015
 """
 from collections import defaultdict
 import string
-from nltk.corpus import stopwords
-from gensim import corpora, models, similarities
+import numpy
+import matplotlib.pyplot as plt
 
 
-locations = defaultdict(int)
-for b in businesses:
-    locations[b['city']] += 1
-    
-popularLocations = []
-for l in locations:
-    popularLocations.append([locations[l], l])
-    
-popularLocations.sort()
-popularLocations.reverse()
-
-
-#analize review corpus
-punctuation = set(string.punctuation)
-
-rCorpus = []
+review_count = defaultdict(int)
 for r in reviews:
-    ### Ignore capitalization and remove punctuation
-    rCorpus.append(''.join([c for c in r['text'].lower() if not c in punctuation]))
+    review_count[r['business_id']] += 1
+
+popularBusinesses = []
+for c in review_count:
+    popularBusinesses.append([review_count[c], c])
     
-#remove stopwords
-stops = set(stopwords.words('english'))    
-rCorpus = [[word for word in review.split() if word not in stops] for review in rCorpus]
+popularBusinesses.sort()
+popularBusinesses.reverse()
 
-# remove words that appear only once
-word_freq = defaultdict(int)
+count = 1
+while (1):
+    if count > 1.0*len(popularBusinesses)/2:
+        print popularBusinesses[count-1][0]
+        break
+    count +=1
+    
+x_to_y = defaultdict(int)
+for c in popularBusinesses:
+    x_to_y[c[0]] += 1
+    
 
-for r in rCorpus:
-    for word in r:
-        word_freq[word] += 1
+X = []
+Y = []
+for x in x_to_y:
+    X.append(x)
+    Y.append(x_to_y[x])
+    
+plt.plot(X, Y)
+plt.title("Number of reviews per business")
+plt.xlabel("Number of reviews")
+plt.ylabel("Frequency of occurrence")
+
+food_related = []
+for b in businesses:
+    for c in b['categories']:
+        if c == 'Food' or c == 'Restaurants':
+            food_related.append(b)
+            break
         
-rCorpus = [[word for word in review if word_freq[word] > 1] for review in rCorpus]
-
-dictionary = corpora.Dictionary(rCorpus)
-#store dictionary
-dictionary.save('/Users/Carlo/Documents/Yelp_LDA/dict_v1.dict')
-
-#gensim
-corpus = [dictionary.doc2bow(review) for review in rCorpus]
-corpora.MmCorpus.serialize('corpus_v1.mm', corpus)
-
-#load dictionary and corpus
-dictionary = corpora.Dictionary.load('dict_v1.dict')
-corpus = corpora.MmCorpus('corpus_v1.mm')
-
-tfidf = models.TfidfModel(corpus)
-corpus_tfidf = tfidf[corpus]
-
-lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=50)
-topics = lsi.print_topics(50)
-
-for i in range(len(topics)):
-    print "topic #%r: " %(i+1), topics[i]
     
-lsi.save('model.lsi')
+    
+for i in range(50):
+    business_id = popularBusinesses[i][1]
+    print "category:%s" %category[business_id], "count:%r" % popularBusinesses[i][0] 
+
+
+
+#average number of words per review
+rev_count = []
+for r in reviews:
+    rev_count.append(len(r['text'].split()))
+rev_count.sort()
+rev_count.reverse()
+
+numpy.median(numpy.array(rev_count))
+
+x_to_y = defaultdict(int)
+for c in rev_count:
+    x_to_y[c] += 1
+    
+
+X = []
+Y = []
+for x in x_to_y:
+    X.append(x)
+    Y.append(x_to_y[x])
+    
+plt.plot(X, Y)
+plt.title("Number of words per review")
+plt.xlabel("Number of words")
+plt.ylabel("Frequency of occurrence")
